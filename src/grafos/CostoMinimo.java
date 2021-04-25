@@ -64,14 +64,14 @@ public class CostoMinimo {
 		int i=0;
 		while(br.readLine()!=null)
 		{
-			String [] fila = br.readLine().split(" ");
+			String [] fila = br.readLine().split("");
 			if(grafo==null)
 			{
 				grafo=new int[fila.length][fila.length];
 			}
 			for(int j=0; j<fila.length; ++j)
 			{
-				grafo[i][j]=Integer.parseInt(fila[j]);
+				grafo[i][j]=Integer.parseInt(fila[j].trim());
 			}
 			++i;
 		}	

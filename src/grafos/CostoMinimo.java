@@ -13,7 +13,9 @@ import java.io.IOException;
 public class CostoMinimo {
 	/**
 	 * Clase main que ejecuta el programa.
-	 * @param args
+	 * @param args[0]. Nombre del algoritmo que resolverá el problema: Dijkstra, BellmanFord, FloydWarshall.
+	 * @param args[1]. Nombre del archivo .txt que se encuentra en la carpeta ./data del proyecto. 
+	 * 				   Se debe incluir el .txt después del nombre del archivo para que el programa ejecute correctamente.
 	 * @throws Exception Si ocurre un error al ejecutar el programa. 
 	 */
 	public static void main(String[] args) throws Exception {
@@ -31,22 +33,25 @@ public class CostoMinimo {
 		int [][] costo = algoritmo.costoMinimo(grafo);
 		long endTime = System.currentTimeMillis();
 		
-		System.out.println("El tiempo que tardó el algoritmo "+ claseAlgoritmo+ " fue de: "+(endTime-startTime));
 		String resultado="";
-		//Output results
-		System.out.println("Grafo:\n");
+		
+		//Salida del programa
+		System.out.println("Matriz de costos:\n");
 		for(int i=0;i<costo.length;++i) 
 		{
 			for(int j=0; j<costo.length; ++j)
 			{
-				resultado+=Integer.toString(costo[i][j]);
+				resultado+=Integer.toString(costo[i][j])+"\t";
 				if(j==costo.length-1)
 				{
-					resultado+="\n";
+					System.out.println(resultado);
+					resultado="";
 				}
 			}
 		}
 		System.out.println(resultado);
+		
+		System.out.println("El tiempo que tardó el algoritmo "+ args[0]+ " fue de: "+(endTime-startTime)+ " ms.");
 	}
 	
 	/**
@@ -62,9 +67,10 @@ public class CostoMinimo {
 		
 		int [][] grafo = null;
 		int i=0;
-		while(br.readLine()!=null)
+		String linea;
+		while((linea = br.readLine())!=null)
 		{
-			String [] fila = br.readLine().split("");
+			String [] fila = linea.split("\t");
 			if(grafo==null)
 			{
 				grafo=new int[fila.length][fila.length];

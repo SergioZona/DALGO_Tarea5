@@ -1,5 +1,12 @@
 package grafos;
 
+/*
+ * ACLARACIÓN PRELIMINAR: Para esta clase, basamos nuestra implementación en el código Programiz. 
+ * Especialmente en el siguiente enlace: https://www.programiz.com/dsa/floyd-warshall-algorithm
+ * Damos completo crédito a los autores y referenciamos su uso libre dentro del marco legal correspondiente.
+ * No buscamos generar plagio, ni tampoco tener inconvenietes asociados al mismo.
+ */
+
 /**
  * Clase que implementa el algoritmo de Floyd Warshall para la solución del problema de costo mínimo.
  * @author Kevin Steven Gamez Abril y Sergio Julian Zona Moreno
@@ -7,49 +14,79 @@ package grafos;
 public class FloydWarshallCostoMinimo implements AlgoritmoCostoMinimo{
 
 	/**
-	 * Implementación del algoritmo de Bellman Ford
+	 * Implementación del algoritmo de Floyd Warshall.
+	 * @param grafo Grafo ingresado por parámetro.
+	 * @return Matriz que contiene todos los costos mínimos de cada vértice de origen a cada vértice de destino.
 	 */
 	@Override
-	public int[][] costoMinimo(int[][] grafo) {
-		int dp[][]= new int[grafo[0].length][grafo[0].length];
-		
-		//Inicialización de variables
-		int i=0;
-		int j=0;
-		int k=0;
-		int n=grafo[0].length;
-		
-		while(k<=n)
+	public int[][] costoMinimo(int[][] grafo) 
+	{
+		int V = grafo[0].length;
+		int m[][] = convertirGrafo(grafo, V);
+
+		//Recorrido a través de las matrices.
+		for (int k = 0; k < V; k++) 
 		{
-			//Ecuación de recurrencia
-			if(k==0)
+			for (int i = 0; i < V; i++) 
 			{
-				dp[i][j]=grafo[i][j];
-			}
-			else if(k>0 && i!=k && j!=k)
-			{
-				dp[i][j]=Math.min(dp[i][j], dp[i][k-1]+dp[k-1][j]);
-			}
-			
-			//Recorrido de la matriz.
-			if(j<n-1)
-			{
-				++j;
-			}
-			else if(j==n-1 && i<n-1)
-			{
-				++i;
-				j=0;
-			}
-			else if(j==n-1 && i==n-1) //Es necesario efectuar |V| veces la relajación de vértices para llegar a la solución.
-			{
-				++k;
+				for (int j = 0; j < V; j++) 
+				{
+					//Se verifica si no existe un camino más corto entre los dos vértices.
+					//Se genera la matriz recursivamente y se traen los valores.
+					if (!sumaOverflow(m[i][k], m[k][j]) && m[i][k] + m[k][j] < m[i][j])
+					{
+						m[i][j] = m[i][k] + m[k][j];
+					}
+				}
 			}
 		}
-		
-		return dp;
+
+		return m;
 	}
 
+	/**
+	 * Método que modifica los -1 del grafo por infinitos y retorna el grafo resultante.
+	 * @param grafo Grafo que será modificado.
+	 * @param V Número de vértices del grafo.
+	 * @return Grafo modificado. 
+	 */
+	public int [][] convertirGrafo(int[][] grafo, int V)
+	{
+		int m[][] = new int[V][V];
+		for (int i = 0; i < V; i++)
+		{
+			for (int j = 0; j < V; j++)
+			{
+				if(grafo[i][j]==-1)
+				{
+					m[i][j] = Integer.MAX_VALUE;
+				}
+				else 
+				{
+					m[i][j] = grafo[i][j];
+				}
+			}		       
+		}
+		return m;
+	}
+
+	/**
+	 * Método que verifica si la suma entre dos números no genera un Overflow en la pila que afecte la operación a realizar.
+	 * @param num1 Número 1 a sumar.
+	 * @param num2 Número 2 a sumar.
+	 * @return True si existe un Overflow al sumar los dos números. False en caso contrario.
+	 */
+	public static boolean sumaOverflow(int num1, int num2) {
+	    try 
+	    {
+	        Math.addExact(num1, num2);
+	        return false;
+	    } 
+	    catch (ArithmeticException e) 
+	    {
+	        return true;
+	    }
+	}
 }
 
 

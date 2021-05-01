@@ -56,7 +56,6 @@ public class BellmanFordCostoMinimo implements AlgoritmoCostoMinimo{
 		//Se recorren los V-1 vértices.
 		for (int i = 0; i < V - 1; i++)
 		{
-
 			for (int j = 0; j < E; j++)
 			{
 				//Relajación del vértice.
@@ -64,6 +63,16 @@ public class BellmanFordCostoMinimo implements AlgoritmoCostoMinimo{
 					dis[graph[j][1]] = dis[graph[j][0]] + graph[j][2];
 			}
 		}
+		
+		//Se verifica que no existan ciclos negativos en el grafo.
+		for (int i = 0; i < E; i++)
+	    {
+	        int x = graph[i][0];
+	        int y = graph[i][1];
+	        int weight = graph[i][2];
+	        if (dis[x] != Integer.MAX_VALUE && dis[x] + weight < dis[y])
+	            System.out.println("Graph contains negative weight cycle");
+	    }		
 		return dis;
 	}
 

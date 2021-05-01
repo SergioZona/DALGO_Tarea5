@@ -33,14 +33,14 @@ public class FloydWarshallCostoMinimo implements AlgoritmoCostoMinimo{
 				{
 					//Se verifica si no existe un camino más corto entre los dos vértices.
 					//Se genera la matriz recursivamente y se traen los valores.
-					if (!sumaOverflow(m[i][k], m[k][j]) && m[i][k] + m[k][j] < m[i][j])
+					if ((m[i][k]!=Integer.MAX_VALUE && m[k][j]!=Integer.MAX_VALUE)
+							&&m[i][k] + m[k][j] < m[i][j])
 					{
 						m[i][j] = m[i][k] + m[k][j];
 					}
 				}
 			}
 		}
-
 		return m;
 	}
 
@@ -68,24 +68,6 @@ public class FloydWarshallCostoMinimo implements AlgoritmoCostoMinimo{
 			}		       
 		}
 		return m;
-	}
-
-	/**
-	 * Método que verifica si la suma entre dos números no genera un Overflow en la pila que afecte la operación a realizar.
-	 * @param num1 Número 1 a sumar.
-	 * @param num2 Número 2 a sumar.
-	 * @return True si existe un Overflow al sumar los dos números. False en caso contrario.
-	 */
-	public static boolean sumaOverflow(int num1, int num2) {
-	    try 
-	    {
-	        Math.addExact(num1, num2);
-	        return false;
-	    } 
-	    catch (ArithmeticException e) 
-	    {
-	        return true;
-	    }
 	}
 }
 
